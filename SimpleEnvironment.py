@@ -31,30 +31,30 @@ class SimpleEnvironment(object):
         #  nodes
         env = self.discrete_env
         coords = env.NodeIdToGridCoord(node_id)
+        # print("coordinates for node id ("+str(node_id)+") = "+str(coords))
 
         newCoord = coords
         # print(newCoord)
         # print(env.GridCoordToConfiguration(newCoord))
 
-        newCoord[0] = coords[0] + 1
-        # print(newCoord)
-        # print(env.GridCoordToConfiguration(newCoord))
+        newCoord = [coords[0] + 1, coords[1]]
         newID = env.GridCoordToNodeId(newCoord)
+        # print(newID)
         successors.append(newID)
 
-        newCoord[1] = coords[1] + 1
-        # print(newCoord)
-        # print(env.GridCoordToConfiguration(newCoord))
+        newCoord = [coords[0], coords[1] + 1]
+        newID = env.GridCoordToNodeId(newCoord)
+        # print(newID)
         successors.append(newID)
 
-        newCoord[1] = coords[1] - 1
-        # print(newCoord)
-        # print(env.GridCoordToConfiguration(newCoord))
+        newCoord = [coords[0], coords[1] - 1]
+        newID = env.GridCoordToNodeId(newCoord)
+        # print(newID)
         successors.append(newID)
 
-        newCoord[0] = coords[0] - 1
-        # print(newCoord)
-        # print(env.GridCoordToConfiguration(newCoord))
+        newCoord = [coords[0] - 1, coords[1]]
+        newID = env.GridCoordToNodeId(newCoord)
+        # print(newID)
         successors.append(newID)
 
         # print(successors)

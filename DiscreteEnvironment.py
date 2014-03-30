@@ -20,7 +20,7 @@ class DiscreteEnvironment(object):
         for idx in range(self.dimension):
             self.num_cells[idx] = numpy.ceil((upper_limits[idx] - lower_limits[idx]) / resolution)
 
-        self.test()
+        # self.test()
 
     def test(self):
         # print ('resolution = '+str(self.resolution))
