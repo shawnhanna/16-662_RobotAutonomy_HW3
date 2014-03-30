@@ -1,5 +1,6 @@
 import numpy, openravepy
 
+
 class SimpleRobot(object):
 
     def __init__(self, env):
@@ -22,7 +23,7 @@ class SimpleRobot(object):
 
     def GetCurrentConfiguration(self):
         t = self.robot.GetTransform()
-        pose = t[:2,3]
+        pose = t[:2, 3]
         return pose
 
     def ConvertPlanToTrajectory(self, plan):

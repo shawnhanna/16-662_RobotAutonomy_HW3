@@ -1,6 +1,7 @@
 import numpy
 import pylab as pl
 from DiscreteEnvironment import DiscreteEnvironment
+import math
 
 class SimpleEnvironment(object):
 
@@ -28,26 +29,55 @@ class SimpleEnvironment(object):
         #  up the configuration associated with the particular node_id
         #  and return a list of node_ids that represent the neighboring
         #  nodes
+        env = self.discrete_env
+        coords = env.NodeIdToGridCoord(node_id)
+
+        newCoord = coords
+        # print(newCoord)
+        # print(env.GridCoordToConfiguration(newCoord))
+
+        newCoord[0] = coords[0] + 1
+        # print(newCoord)
+        # print(env.GridCoordToConfiguration(newCoord))
+        newID = env.GridCoordToNodeId(newCoord)
+        successors.append(newID)
+
+        newCoord[1] = coords[1] + 1
+        # print(newCoord)
+        # print(env.GridCoordToConfiguration(newCoord))
+        successors.append(newID)
+
+        newCoord[1] = coords[1] - 1
+        # print(newCoord)
+        # print(env.GridCoordToConfiguration(newCoord))
+        successors.append(newID)
+
+        newCoord[0] = coords[0] - 1
+        # print(newCoord)
+        # print(env.GridCoordToConfiguration(newCoord))
+        successors.append(newID)
+
+        # print(successors)
 
         return successors
 
     def ComputeDistance(self, start_id, end_id):
-
-        dist = 0
-
         # TODO: Here you will implement a function that
         # computes the distance between the configurations given
         # by the two node ids
+        start = self.discrete_env.NodeIdToConfiguration(start_id)
+        end = self.discrete_env.NodeIdToConfiguration(end_id)
+
+        # Manhattan distance
+        dist = end[0] - start[0] + end[1] - start[1]
 
         return dist
 
     def ComputeHeuristicCost(self, start_id, goal_id):
-
-        cost = 0
-
         # TODO: Here you will implement a function that
         # computes the heuristic cost between the configurations
         # given by the two node ids
+        cost = ComputeDistance(start_id, goal_id)
 
         return cost
 
