@@ -2,6 +2,7 @@ import numpy
 import pylab as pl
 from DiscreteEnvironment import DiscreteEnvironment
 import math
+import time
 
 class SimpleEnvironment(object):
 
@@ -39,25 +40,26 @@ class SimpleEnvironment(object):
 
         newCoord = [coords[0] + 1, coords[1]]
         newID = env.GridCoordToNodeId(newCoord)
-        if (self.CheckCollisions(newID) == False):
+        if (self.CheckCollisions(newID) == False and self.InBounds(newID) == True):
             successors.append(newID)
 
         newCoord = [coords[0], coords[1] + 1]
         newID = env.GridCoordToNodeId(newCoord)
-        if (self.CheckCollisions(newID) == False):
+        if (self.CheckCollisions(newID) == False and self.InBounds(newID) == True):
             successors.append(newID)
 
         newCoord = [coords[0], coords[1] - 1]
         newID = env.GridCoordToNodeId(newCoord)
-        if (self.CheckCollisions(newID) == False):
+        if (self.CheckCollisions(newID) == False and self.InBounds(newID) == True):
             successors.append(newID)
 
         newCoord = [coords[0] - 1, coords[1]]
         newID = env.GridCoordToNodeId(newCoord)
-        if (self.CheckCollisions(newID) == False):
+        if (self.CheckCollisions(newID) == False and self.InBounds(newID) == True):
             successors.append(newID)
 
         # print(successors)
+        time.sleep(0.01)
 
         return successors
 
@@ -74,6 +76,16 @@ class SimpleEnvironment(object):
             return True
         else:
             return False
+
+    def InBounds(self, node_id):
+        config = self.discrete_env.NodeIdToConfiguration(node_id)
+
+        for x in xrange(0, self.discrete_env.dimension):
+            if config[x] < self.upper_limits[x] and config[x] > self.lower_limits[x]:
+                return False
+            else:
+                return True
+
 
 
     def ComputeDistance(self, start_id, end_id):

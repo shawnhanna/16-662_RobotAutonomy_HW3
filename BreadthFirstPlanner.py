@@ -16,7 +16,6 @@ class BreadthFirstPlanner(object):
         #  The return path should be a numpy array
         #  of dimension k x n where k is the number of waypoints
         #  and n is the dimension of the robots configuration space
-        name = self.planning_env.robot.GetName()
 
         d_env = self.planning_env.discrete_env
         start_id = d_env.ConfigurationToNodeId(start_config)
@@ -55,11 +54,11 @@ class BreadthFirstPlanner(object):
             successors = self.planning_env.GetSuccessors(cur_id)
             # print("sccessors: "+str(successors))
             for succ in successors:
-                print("succ: "+str(d_env.NodeIdToGridCoord(succ)))
+                # print("succ: "+str(d_env.NodeIdToGridCoord(succ)))
                 successorCost = costs.get(succ)
-                print("curr cost = "+str(cost)+", new cost = "+str(successorCost))
+                # print("curr cost = "+str(cost)+", new cost = "+str(successorCost))
                 if (successorCost < cost and successorCost != None):
-                    print("Better cost")
+                    # print("Better cost")
                     cur_id = succ
                     cost = successorCost
 
