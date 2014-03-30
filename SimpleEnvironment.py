@@ -22,6 +22,9 @@ class SimpleEnvironment(object):
                                   [ 0, 0,  0, 1]])
         self.table.SetTransform(table_pose)
 
+        self.lastDrawTime = int(round(time.time() * 1000))
+        self.drawCount = 1
+
     def GetSuccessors(self, node_id):
 
         successors = []
@@ -59,7 +62,7 @@ class SimpleEnvironment(object):
             successors.append(newID)
 
         # print(successors)
-        time.sleep(0.01)
+        # time.sleep(0.0001)
 
         return successors
 
@@ -78,13 +81,15 @@ class SimpleEnvironment(object):
             return False
 
     def InBounds(self, node_id):
+        return True
+
         config = self.discrete_env.NodeIdToConfiguration(node_id)
 
         for x in xrange(0, self.discrete_env.dimension):
-            if config[x] < self.upper_limits[x] and config[x] > self.lower_limits[x]:
-                return False
-            else:
+            if config[x] < self.upper_limits[x]-0.1 and config[x] > self.lower_limits[x]+0.1:
                 return True
+            else:
+                return False
 
 
 
@@ -138,6 +143,9 @@ class SimpleEnvironment(object):
         pl.plot([sconfig[0], econfig[0]],
                 [sconfig[1], econfig[1]],
                 'k.-', linewidth=2.5)
-        pl.draw()
 
-
+        self.drawCount = self.drawCount + 1
+        millis = int(round(time.time() * 1000))
+        if((self.lastDrawTime + self.drawCount) < millis):
+            self.lastDrawTime = millis
+            pl.draw()
