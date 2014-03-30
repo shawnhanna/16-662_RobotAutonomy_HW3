@@ -12,14 +12,14 @@ class SimpleEnvironment(object):
         self.discrete_env = DiscreteEnvironment(resolution, self.lower_limits, self.upper_limits)
 
         # add an obstacle
-        table = self.robot.GetEnv().ReadKinBodyXMLFile('models/objects/table.kinbody.xml')
-        self.robot.GetEnv().Add(table)
+        self.table = self.robot.GetEnv().ReadKinBodyXMLFile('models/objects/table.kinbody.xml')
+        self.robot.GetEnv().Add(self.table)
 
         table_pose = numpy.array([[ 0, 0, -1, 1.5],
                                   [-1, 0,  0, 0],
                                   [ 0, 1,  0, 0],
                                   [ 0, 0,  0, 1]])
-        table.SetTransform(table_pose)
+        self.table.SetTransform(table_pose)
 
     def GetSuccessors(self, node_id):
 
@@ -39,27 +39,42 @@ class SimpleEnvironment(object):
 
         newCoord = [coords[0] + 1, coords[1]]
         newID = env.GridCoordToNodeId(newCoord)
-        # print(newID)
-        successors.append(newID)
+        if (self.CheckCollisions(newID) == False):
+            successors.append(newID)
 
         newCoord = [coords[0], coords[1] + 1]
         newID = env.GridCoordToNodeId(newCoord)
-        # print(newID)
-        successors.append(newID)
+        if (self.CheckCollisions(newID) == False):
+            successors.append(newID)
 
         newCoord = [coords[0], coords[1] - 1]
         newID = env.GridCoordToNodeId(newCoord)
-        # print(newID)
-        successors.append(newID)
+        if (self.CheckCollisions(newID) == False):
+            successors.append(newID)
 
         newCoord = [coords[0] - 1, coords[1]]
         newID = env.GridCoordToNodeId(newCoord)
-        # print(newID)
-        successors.append(newID)
+        if (self.CheckCollisions(newID) == False):
+            successors.append(newID)
 
         # print(successors)
 
         return successors
+
+    def CheckCollisions(self, node_id):
+        config = self.discrete_env.NodeIdToConfiguration(node_id)
+
+        x = config[0]
+        y = config[1]
+        transform = self.robot.GetTransform()
+        transform[0][3] = x
+        transform[1][3] = y
+        self.robot.SetTransform(transform)
+        if self.robot.GetEnv().CheckCollision(self.robot,self.table) == True:
+            return True
+        else:
+            return False
+
 
     def ComputeDistance(self, start_id, end_id):
         # TODO: Here you will implement a function that
