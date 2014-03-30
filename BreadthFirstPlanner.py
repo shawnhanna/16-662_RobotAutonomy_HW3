@@ -10,6 +10,9 @@ class BreadthFirstPlanner(object):
 
         plan = []
 
+        if self.visualize:
+            self.planning_env.InitializePlot(goal_config)
+
         queue = Queue.Queue()
 
         # TODO: Here you will implement the breadth first planner
@@ -35,11 +38,16 @@ class BreadthFirstPlanner(object):
             succ = self.planning_env.GetSuccessors(cur_id)
             for x in succ:
                 new_id = x
+
                 if (costs.get(new_id) is None):
                     cost = costs[cur_id] + 1
                     costs[new_id] = cost
                     # print(new_id)
                     queue.put(new_id)
+
+                    print("cur id "+str(d_env.NodeIdToConfiguration(new_id))+" form id "+str(d_env.NodeIdToConfiguration(cur_id)))
+                    if self.visualize:
+                        self.planning_env.PlotEdge(d_env.NodeIdToConfiguration(new_id), d_env.NodeIdToConfiguration(cur_id))
 
                     if (new_id == goal_id):
                         found_path = True
@@ -51,18 +59,20 @@ class BreadthFirstPlanner(object):
         cur_id = goal_id
         while cur_id != start_id:
             cost = costs[cur_id]
+            form_id = cur_id
             successors = self.planning_env.GetSuccessors(cur_id)
             # print("sccessors: "+str(successors))
             for succ in successors:
-                # print("succ: "+str(d_env.NodeIdToGridCoord(succ)))
                 successorCost = costs.get(succ)
-                # print("curr cost = "+str(cost)+", new cost = "+str(successorCost))
                 if (successorCost < cost and successorCost != None):
                     # print("Better cost")
                     cur_id = succ
                     cost = successorCost
 
             plan.append(d_env.NodeIdToConfiguration(cur_id))
+            if self.visualize:
+                self.planning_env.PlotEdge(d_env.NodeIdToConfiguration(cur_id), d_env.NodeIdToConfiguration(cur_id))
+
 
         plan.append(start_config)
 
