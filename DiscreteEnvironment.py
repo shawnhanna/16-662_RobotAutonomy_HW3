@@ -92,12 +92,15 @@ class DiscreteEnvironment(object):
         # grid cell number, but with just one dimension instead of 2
         #
         # Add one
+
+        
         node_id = 0
         multiplications = 1
         for i in xrange(0, self.dimension):
             node_id = node_id + coord[i]*multiplications
 
             multiplications = multiplications * self.num_cells[i]
+        #print ("Coordinate is: "+str(coord)+" Node is: "+str(node_id))
         return node_id
 
     def NodeIdToGridCoord(self, node_id):

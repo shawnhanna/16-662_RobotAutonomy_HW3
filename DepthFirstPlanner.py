@@ -11,6 +11,10 @@ class DepthFirstPlanner(object):
 
         plan = []
 
+
+        if self.visualize:
+            self.planning_env.InitializePlot(goal_config)
+
         # TODO: Here you will implement the depth first planner
         #  The return path should be a numpy array
         #  of dimension k x n where k is the number of waypoints
@@ -68,10 +72,13 @@ class DepthFirstPlanner(object):
                 # print("curr cost = "+str(cost)+", new cost = "+str(successorCost))
                 if (successorCost < cost and successorCost != None):
                     # print("Better cost")
+                    if self.visualize:
+                        self.planning_env.PlotEdge(d_env.NodeIdToConfiguration(succ), d_env.NodeIdToConfiguration(cur_id))
                     cur_id = succ
                     cost = successorCost
 
             plan.append(d_env.NodeIdToConfiguration(cur_id))
+
             print(d_env.NodeIdToConfiguration(cur_id))
 
         plan.append(start_config)

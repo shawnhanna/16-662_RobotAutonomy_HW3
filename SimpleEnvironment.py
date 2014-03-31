@@ -41,24 +41,36 @@ class SimpleEnvironment(object):
         # print(newCoord)
         # print(env.GridCoordToConfiguration(newCoord))
 
-        newCoord = [coords[0] + 1, coords[1]]
+        newCoord = [coords[0] - 1, coords[1]]
         newID = env.GridCoordToNodeId(newCoord)
-        if (self.CheckCollisions(newID) == False and self.InBounds(newID) == True):
-            successors.append(newID)
-
-        newCoord = [coords[0], coords[1] + 1]
-        newID = env.GridCoordToNodeId(newCoord)
-        if (self.CheckCollisions(newID) == False and self.InBounds(newID) == True):
+        #print("New coord: "+str(newCoord)+" config from coord is: "+str(self.discrete_env.GridCoordToConfiguration(newCoord)))
+        #print("Coord is: "+str(self.discrete_env.NodeIdToGridCoord(newID)))
+        #print("Config space is: "+str(self.discrete_env.NodeIdToConfiguration(newID))+" Is in bounds? "+str(self.InBounds(newCoord)))
+        if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
             successors.append(newID)
 
         newCoord = [coords[0], coords[1] - 1]
         newID = env.GridCoordToNodeId(newCoord)
-        if (self.CheckCollisions(newID) == False and self.InBounds(newID) == True):
+        #print("New coord: "+str(newCoord)+" config from coord is: "+str(self.discrete_env.GridCoordToConfiguration(newCoord)))
+        #print("Coord is: "+str(self.discrete_env.NodeIdToGridCoord(newID)))
+        #print("Config space is: "+str(self.discrete_env.NodeIdToConfiguration(newID))+" Is in bounds? "+str(self.InBounds(newCoord)))
+        if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
             successors.append(newID)
 
-        newCoord = [coords[0] - 1, coords[1]]
+        newCoord = [coords[0], coords[1] + 1]
         newID = env.GridCoordToNodeId(newCoord)
-        if (self.CheckCollisions(newID) == False and self.InBounds(newID) == True):
+        #print("New coord: "+str(newCoord)+" config from coord is: "+str(self.discrete_env.GridCoordToConfiguration(newCoord)))
+        #print("Coord is: "+str(self.discrete_env.NodeIdToGridCoord(newID)))
+        #print("Config space is: "+str(self.discrete_env.NodeIdToConfiguration(newID))+" Is in bounds? "+str(self.InBounds(newCoord)))
+        if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
+            successors.append(newID)
+
+        newCoord = [coords[0] + 1, coords[1]]
+        newID = env.GridCoordToNodeId(newCoord)
+        #print("New coord: "+str(newCoord)+" config from coord is: "+str(self.discrete_env.GridCoordToConfiguration(newCoord)))
+        #print("Coord is: "+str(self.discrete_env.NodeIdToGridCoord(newID)))
+        #print("Config space is: "+str(self.discrete_env.NodeIdToConfiguration(newID))+" Is in bounds? "+str(self.InBounds(newCoord)))
+        if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
             successors.append(newID)
 
         # print(successors)
@@ -80,17 +92,17 @@ class SimpleEnvironment(object):
         else:
             return False
 
-    def InBounds(self, node_id):
-        return True
 
-        config = self.discrete_env.NodeIdToConfiguration(node_id)
+
+    def InBounds(self, coord):
+        #return True
+
+        config = self.discrete_env.GridCoordToConfiguration(coord)
 
         for x in xrange(0, self.discrete_env.dimension):
-            if config[x] < self.upper_limits[x]-0.1 and config[x] > self.lower_limits[x]+0.1:
-                return True
-            else:
+            if not(config[x] < self.upper_limits[x]-0.0005 and config[x] > self.lower_limits[x]+0.0005):
                 return False
-
+        return True
 
 
     def ComputeDistance(self, start_id, end_id):
