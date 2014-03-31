@@ -112,8 +112,16 @@ class SimpleEnvironment(object):
         start = self.discrete_env.NodeIdToConfiguration(start_id)
         end = self.discrete_env.NodeIdToConfiguration(end_id)
 
+        print("Current id is: "+str(start_id)+" Goal id is: "+str(end_id))
+
+        print("Current is: "+str(start)+" Goal is: "+str(end))
+
+
+
         # Manhattan distance
-        dist = end[0] - start[0] + end[1] - start[1]
+        dist = abs(end[0] - start[0]) + abs(end[1] - start[1])
+        print("X dist is: "+str(abs(end[0]-start[0]))+ "Y dist is: "+str(abs(end[1]-start[1])))
+        print("Total dist is: "+str(dist))
 
         return dist
 
@@ -121,7 +129,7 @@ class SimpleEnvironment(object):
         # TODO: Here you will implement a function that
         # computes the heuristic cost between the configurations
         # given by the two node ids
-        cost = ComputeDistance(start_id, goal_id)
+        cost = self.ComputeDistance(start_id, goal_id)
 
         return cost
 
