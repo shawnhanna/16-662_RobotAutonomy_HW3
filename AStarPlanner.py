@@ -34,12 +34,15 @@ class AStarPlanner(object):
 
         costs = dict()
         costs[start_id] = 0
-        queue.put(start_id)
+
+        queue.put([self.planning_env.ComputeHeuristicCost(start_id, goal_id), start_id])
 
         print("Goal id = "+str(goal_id))
 
         cur_id = start_id
         found_path = False
+
+        cur_id = queue.get()[1]
         while cur_id != None and found_path == False:
 
             # print(d_env.NodeIdToConfiguration(cur_id))
@@ -47,19 +50,29 @@ class AStarPlanner(object):
             for new_id in succ:
                 if (costs.get(new_id) is None):
                     #print("Goal id:"+str(goal_id))
-                    costs[new_id] = costs[cur_id] + 1
+                    costs[new_id] = costs[cur_id] + d_env.resolution
+
+                    h = self.planning_env.ComputeHeuristicCost(new_id, goal_id)
+
+                    print("Heuristic cost for config: " + str(d_env.NodeIdToConfiguration(new_id)) + " is: "+str(h))
+
+                    expectedTotal = h + costs[new_id]
+
+                    queueTuple = [expectedTotal, new_id]
+                    queue.put(queueTuple)
                 else:
-                    if (costs[new_id] > costs[cur_id] + 1):
-                        costs[new_id] = costs[cur_id] + 1
+                    if (costs[new_id] > costs[cur_id] + d_env.resolution):
+                        costs[new_id] = costs[cur_id] + d_env.resolution
 
-                h = self.planning_env.ComputeHeuristicCost(new_id, goal_id)
+                        h = self.planning_env.ComputeHeuristicCost(new_id, goal_id)
 
-                # print("Heuristic cost is: "+str(h))
+                        # print("Heuristic cost is: "+str(h))
 
-                expectedTotal = h+costs[new_id]
+                        expectedTotal = h + costs[new_id]
 
-                queueTuple = [expectedTotal, new_id]
-                queue.put(new_id)
+                        queueTuple = [expectedTotal, new_id]
+                        queue.put(queueTuple)
+
 
                 # print("cur id "+str(d_env.NodeIdToConfiguration(new_id))+" form id "+str(d_env.NodeIdToConfiguration(cur_id)))
                 if self.visualize:
@@ -69,6 +82,7 @@ class AStarPlanner(object):
                     found_path = True
                     print("Found path")
 
+            # nextTuple=queue.get()
             cur_id = queue.get()[1]
 
         plan.append(goal_config)
@@ -84,7 +98,7 @@ class AStarPlanner(object):
                 if (successorCost < cost and successorCost != None):
                     print("Better cost")
                     if self.visualize:
-                        self.planning_env.PlotEdge(d_env.NodeIdToConfiguration(succ), d_env.NodeIdToConfiguration(cur_id))
+                        self.planning_env.PlotEdge(d_env.NodeIdToConfiguration(succ), d_env.NodeIdToConfiguration(cur_id), 'b')
                     cur_id = succ
                     cost = successorCost
 

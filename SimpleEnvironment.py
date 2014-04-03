@@ -112,16 +112,15 @@ class SimpleEnvironment(object):
         start = self.discrete_env.NodeIdToConfiguration(start_id)
         end = self.discrete_env.NodeIdToConfiguration(end_id)
 
-        print("Current id is: "+str(start_id)+" Goal id is: "+str(end_id))
-
-        print("Current is: "+str(start)+" Goal is: "+str(end))
+        # print("Current id is: "+str(start_id)+" Goal id is: "+str(end_id))
+        # print("Current is: "+str(start)+" Goal is: "+str(end))
 
 
 
         # Manhattan distance
         dist = abs(end[0] - start[0]) + abs(end[1] - start[1])
-        print("X dist is: "+str(abs(end[0]-start[0]))+ "Y dist is: "+str(abs(end[1]-start[1])))
-        print("Total dist is: "+str(dist))
+        # print("X dist is: "+str(abs(end[0]-start[0]))+ "Y dist is: "+str(abs(end[1]-start[1])))
+        # print("Total dist is: "+str(dist))
 
         return dist
 
@@ -159,10 +158,10 @@ class SimpleEnvironment(object):
         pl.ion()
         pl.show()
 
-    def PlotEdge(self, sconfig, econfig):
+    def PlotEdge(self, sconfig, econfig, color='k'):
         pl.plot([sconfig[0], econfig[0]],
                 [sconfig[1], econfig[1]],
-                'k.-', linewidth=2.5)
+                color+'.-', linewidth=2.5)
 
         self.drawCount = self.drawCount + 1
         millis = int(round(time.time() * 1000))

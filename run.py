@@ -73,12 +73,16 @@ if __name__ == "__main__":
 
     # Next setup the planner
     if args.planner == 'astar':
+        print("A*")
         planner = AStarPlanner(planning_env, visualize)
     elif args.planner == 'bfs':
+        print("BFS")
         planner = BreadthFirstPlanner(planning_env, visualize)
     elif args.planner == 'dfs':
+        print("DFS")
         planner = DepthFirstPlanner(planning_env, visualize)
     elif args.planner == 'hrrt':
+        print("hrrt")
         planner = HeuristicRRTPlanner(planning_env, visualize)
     else:
         print 'Unknown planner option: %s' % args.planner
