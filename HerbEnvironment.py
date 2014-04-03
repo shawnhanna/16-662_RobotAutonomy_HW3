@@ -47,13 +47,12 @@ class HerbEnvironment(object):
         # print("coordinates for node id ("+str(node_id)+") = "+str(coords))
 
         for x in xrange(0,self.discrete_env.dimension):
-            newCoord = coords
+            newCoord = coords[:]
             newCoord[x] = coords[x] - 1
             newID = env.GridCoordToNodeId(newCoord)
             if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
                 successors.append(newID)
 
-            newCoord = coords
             newCoord[x] = coords[x] + 1
             newID = env.GridCoordToNodeId(newCoord)
             if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
@@ -63,22 +62,21 @@ class HerbEnvironment(object):
 
 
     def ComputeDistance(self, start_id, end_id):
-
-        dist = 0
-
-        # TODO: Here you will implement a function that
         # computes the distance between the configurations given
         # by the two node ids
+
+        start_grid = self.discrete_env.NodeIdToGridCoord(start_id)
+        end_grid = self.discrete_env.NodeIdToGridCoord(end_id)
+
+        dist = 0
+        for x in xrange(0, self.discrete_env.dimension):
+            dist = dist + (abs(end_grid[x] - start_grid[x]) * self.discrete_env.resolution)
 
         return dist
 
     def ComputeHeuristicCost(self, start_id, goal_id):
 
-        cost = 0
-
-        # TODO: Here you will implement a function that
-        # computes the heuristic cost between the configurations
-        # given by the two node ids
+        cost = self.ComputeDistance(start_id, goal_id)
 
         return cost
 

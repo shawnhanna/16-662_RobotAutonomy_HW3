@@ -62,7 +62,7 @@ if __name__ == "__main__":
         print("HERBING IT UP")
         robot = HerbRobot(env, args.manip)
         planning_env = HerbEnvironment(robot, args.resolution)
-        visualize = Falsebreadth
+        visualize = False
     elif args.robot == 'simple':
         print("It's a simple kinda plan")
         robot = SimpleRobot(env)

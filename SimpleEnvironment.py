@@ -53,7 +53,6 @@ class SimpleEnvironment(object):
                 successors.append(newID)
 
         return successors
-        return successors
 
     def CheckCollisions(self, node_id):
         config = self.discrete_env.NodeIdToConfiguration(node_id)
