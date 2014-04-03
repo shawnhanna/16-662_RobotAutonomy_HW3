@@ -42,8 +42,25 @@ class HerbEnvironment(object):
         #  up the configuration associated with the particular node_id
         #  and return a list of node_ids that represent the neighboring
         #  nodes
+        env = self.discrete_env
+        coords = env.NodeIdToGridCoord(node_id)
+        # print("coordinates for node id ("+str(node_id)+") = "+str(coords))
+
+        for x in xrange(0,self.discrete_env.dimension):
+            newCoord = coords
+            newCoord[x] = coords[x] - 1
+            newID = env.GridCoordToNodeId(newCoord)
+            if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
+                successors.append(newID)
+
+            newCoord = coords
+            newCoord[x] = coords[x] + 1
+            newID = env.GridCoordToNodeId(newCoord)
+            if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
+                successors.append(newID)
 
         return successors
+
 
     def ComputeDistance(self, start_id, end_id):
 

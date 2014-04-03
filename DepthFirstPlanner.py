@@ -45,7 +45,7 @@ class DepthFirstPlanner(object):
             succ = self.planning_env.GetSuccessors(cur_id)
             for new_id in succ:
                 if (costs.get(new_id) is None):
-                    cost = costs[cur_id] + 1
+                    cost = costs[cur_id] + d_env.resolution
                     costs[new_id] = cost
                     # print(new_id)
                     queue.put(new_id)
@@ -73,7 +73,7 @@ class DepthFirstPlanner(object):
                 if (successorCost < cost and successorCost != None):
                     # print("Better cost")
                     if self.visualize:
-                        self.planning_env.PlotEdge(d_env.NodeIdToConfiguration(succ), d_env.NodeIdToConfiguration(cur_id))
+                        self.planning_env.PlotEdge(d_env.NodeIdToConfiguration(succ), d_env.NodeIdToConfiguration(cur_id), 'b')
                     cur_id = succ
                     cost = successorCost
 

@@ -54,7 +54,7 @@ class AStarPlanner(object):
 
                     h = self.planning_env.ComputeHeuristicCost(new_id, goal_id)
 
-                    print("Heuristic cost for config: " + str(d_env.NodeIdToConfiguration(new_id)) + " is: "+str(h))
+                    # print("Heuristic cost for config: " + str(d_env.NodeIdToConfiguration(new_id)) + " is: "+str(h))
 
                     expectedTotal = h + costs[new_id]
 

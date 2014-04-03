@@ -29,53 +29,30 @@ class SimpleEnvironment(object):
 
         successors = []
 
-        # TODO: Here you will implement a function that looks
-        #  up the configuration associated with the particular node_id
+        #  looks up the configuration associated with the particular node_id
         #  and return a list of node_ids that represent the neighboring
         #  nodes
         env = self.discrete_env
         coords = env.NodeIdToGridCoord(node_id)
         # print("coordinates for node id ("+str(node_id)+") = "+str(coords))
 
-        newCoord = coords
-        # print(newCoord)
-        # print(env.GridCoordToConfiguration(newCoord))
+        print('\n')
+        for x in xrange(0,self.discrete_env.dimension):
+            newCoord = coords[:]
+            newCoord[x] = coords[x] - 1
+            newID = env.GridCoordToNodeId(newCoord)
+            print(coords)
+            print(newCoord)
+            if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
+                successors.append(newID)
 
-        newCoord = [coords[0] - 1, coords[1]]
-        newID = env.GridCoordToNodeId(newCoord)
-        #print("New coord: "+str(newCoord)+" config from coord is: "+str(self.discrete_env.GridCoordToConfiguration(newCoord)))
-        #print("Coord is: "+str(self.discrete_env.NodeIdToGridCoord(newID)))
-        #print("Config space is: "+str(self.discrete_env.NodeIdToConfiguration(newID))+" Is in bounds? "+str(self.InBounds(newCoord)))
-        if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
-            successors.append(newID)
+            newCoord[x] = coords[x] + 1
+            newID = env.GridCoordToNodeId(newCoord)
+            print(newCoord)
+            if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
+                successors.append(newID)
 
-        newCoord = [coords[0], coords[1] - 1]
-        newID = env.GridCoordToNodeId(newCoord)
-        #print("New coord: "+str(newCoord)+" config from coord is: "+str(self.discrete_env.GridCoordToConfiguration(newCoord)))
-        #print("Coord is: "+str(self.discrete_env.NodeIdToGridCoord(newID)))
-        #print("Config space is: "+str(self.discrete_env.NodeIdToConfiguration(newID))+" Is in bounds? "+str(self.InBounds(newCoord)))
-        if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
-            successors.append(newID)
-
-        newCoord = [coords[0], coords[1] + 1]
-        newID = env.GridCoordToNodeId(newCoord)
-        #print("New coord: "+str(newCoord)+" config from coord is: "+str(self.discrete_env.GridCoordToConfiguration(newCoord)))
-        #print("Coord is: "+str(self.discrete_env.NodeIdToGridCoord(newID)))
-        #print("Config space is: "+str(self.discrete_env.NodeIdToConfiguration(newID))+" Is in bounds? "+str(self.InBounds(newCoord)))
-        if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
-            successors.append(newID)
-
-        newCoord = [coords[0] + 1, coords[1]]
-        newID = env.GridCoordToNodeId(newCoord)
-        #print("New coord: "+str(newCoord)+" config from coord is: "+str(self.discrete_env.GridCoordToConfiguration(newCoord)))
-        #print("Coord is: "+str(self.discrete_env.NodeIdToGridCoord(newID)))
-        #print("Config space is: "+str(self.discrete_env.NodeIdToConfiguration(newID))+" Is in bounds? "+str(self.InBounds(newCoord)))
-        if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
-            successors.append(newID)
-
-        # print(successors)
-        # time.sleep(0.0001)
-
+        return successors
         return successors
 
     def CheckCollisions(self, node_id):

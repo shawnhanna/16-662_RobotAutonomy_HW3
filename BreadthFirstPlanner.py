@@ -38,7 +38,7 @@ class BreadthFirstPlanner(object):
             succ = self.planning_env.GetSuccessors(cur_id)
             for new_id in succ:
                 if (costs.get(new_id) is None):
-                    cost = costs[cur_id] + 1
+                    cost = costs[cur_id] + d_env.resolution
                     costs[new_id] = cost
                     # print(new_id)
                     queue.put(new_id)
@@ -50,9 +50,6 @@ class BreadthFirstPlanner(object):
                     if (new_id == goal_id):
                         found_path = True
                         print("Found path")
-                else:
-                    if (cost < costs[new_id]):
-                        costs[new_id] = cost
 
 
             cur_id = queue.get()
@@ -72,8 +69,8 @@ class BreadthFirstPlanner(object):
                     cost = successorCost
 
             plan.append(d_env.NodeIdToConfiguration(cur_id))
-            #if self.visualize:
-            #    self.planning_env.PlotEdge(d_env.NodeIdToConfiguration(cur_id), d_env.NodeIdToConfiguration(cur_id))
+            if self.visualize:
+               self.planning_env.PlotEdge(d_env.NodeIdToConfiguration(cur_id), d_env.NodeIdToConfiguration(cur_id), 'b')
 
 
         plan.append(start_config)
