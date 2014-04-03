@@ -93,7 +93,7 @@ class DiscreteEnvironment(object):
         #
         # Add one
 
-        
+
         node_id = 0
         multiplications = 1
         for i in xrange(0, self.dimension):
@@ -109,26 +109,19 @@ class DiscreteEnvironment(object):
         # This function maps a node id to the associated
         # grid coordinate
 
-        # print(self.num_cells)
+        # should work in 7D space
         # coord = [0] * self.dimension
         # for p in range(0, self.dimension):
-        #     i = (self.dimension-1)- p
-        #     print("HERE "+str(i))
+        #     i = self.dimension - p
         #     mult = 1
-        #     for x in xrange(1,i-1):
+        #     for x in xrange(0, i - 1):
         #         mult = mult * self.num_cells[x]
-        #         print("mult="+str(mult)
+        #     print(mult)
         #     coord[i] = math.floor(node_id / mult)
-        #     print("nuum="+str(node_id / mult))
-        #     node_id = node_id - (coord[i] * self.num_cells[i])
+        #     node_id = node_id - (coord[i] * mult)
+
         coord = [0] * self.dimension
         coord[0] = math.floor(node_id % self.num_cells[0])
         coord[1] = math.floor(node_id / self.num_cells[0])
-        # coord = [0] * self.dimension
-        # multiplications = 1
-        # for i in xrange(0, self.dimension):
-        #     # coord[i] = math.floor(node_id / multiplications)
-        #     multiplications = multiplications * self.num_cells[i]
-        #     coord[i] = math.floor(node_id / self.num_cells[i])
 
         return coord

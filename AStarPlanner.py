@@ -21,7 +21,7 @@ class AStarPlanner(object):
         #  of dimension k x n where k is the number of waypoints
         #  and n is the dimension of the robots configuration space
 
-        queue = Queue.LifoQueue()
+        queue = Queue.PriorityQueue()
 
         # TODO: Here you will implement the breadth first planner
         #  The return path should be a numpy array
@@ -47,22 +47,29 @@ class AStarPlanner(object):
             for new_id in succ:
                 if (costs.get(new_id) is None):
                     #print("Goal id:"+str(goal_id))
-                    cost = costs[cur_id] + 1 + self.planning_env.ComputeHeuristicCost(new_id, goal_id)
-                    print(cost)
-                    #print("Heuristic cost is: "+str(self.planning_env.ComputeHeuristicCost(new_id, goal_id)))
-                    costs[new_id] = cost
-                    # print(new_id)
-                    queue.put(new_id)
+                    costs[new_id] = costs[cur_id] + 1
+                else:
+                    if (costs[new_id] > costs[cur_id] + 1):
+                        costs[new_id] = costs[cur_id] + 1
 
-                    # print("cur id "+str(d_env.NodeIdToConfiguration(new_id))+" form id "+str(d_env.NodeIdToConfiguration(cur_id)))
-                    if self.visualize:
-                        self.planning_env.PlotEdge(d_env.NodeIdToConfiguration(new_id), d_env.NodeIdToConfiguration(cur_id))
+                h = self.planning_env.ComputeHeuristicCost(new_id, goal_id)
 
-                    if (new_id == goal_id):
-                        found_path = True
-                        print("Found path")
+                # print("Heuristic cost is: "+str(h))
 
-            cur_id = queue.get()
+                expectedTotal = h+costs[new_id]
+
+                queueTuple = [expectedTotal, new_id]
+                queue.put(new_id)
+
+                # print("cur id "+str(d_env.NodeIdToConfiguration(new_id))+" form id "+str(d_env.NodeIdToConfiguration(cur_id)))
+                if self.visualize:
+                    self.planning_env.PlotEdge(d_env.NodeIdToConfiguration(new_id), d_env.NodeIdToConfiguration(cur_id))
+
+                if (new_id == goal_id):
+                    found_path = True
+                    print("Found path")
+
+            cur_id = queue.get()[1]
 
         plan.append(goal_config)
         cur_id = goal_id

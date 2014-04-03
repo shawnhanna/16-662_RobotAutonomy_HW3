@@ -44,8 +44,8 @@ class BreadthFirstPlanner(object):
                     queue.put(new_id)
 
                     # print("cur id "+str(d_env.NodeIdToConfiguration(new_id))+" form id "+str(d_env.NodeIdToConfiguration(cur_id)))
-                    #if self.visualize:
-                   #     self.planning_env.PlotEdge(d_env.NodeIdToConfiguration(new_id), d_env.NodeIdToConfiguration(cur_id))
+                    if self.visualize:
+                       self.planning_env.PlotEdge(d_env.NodeIdToConfiguration(new_id), d_env.NodeIdToConfiguration(cur_id))
 
                     if (new_id == goal_id):
                         found_path = True
