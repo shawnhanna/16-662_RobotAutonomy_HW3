@@ -1,4 +1,5 @@
 import numpy
+import IPython
 from DiscreteEnvironment import DiscreteEnvironment
 
 class HerbEnvironment(object):
@@ -17,15 +18,15 @@ class HerbEnvironment(object):
             self.discrete_env.num_cells[idx] -= 1
 
         # add a table and move the robot into place
-        table = self.robot.GetEnv().ReadKinBodyXMLFile('models/objects/table.kinbody.xml')
+        self.table = self.robot.GetEnv().ReadKinBodyXMLFile('models/objects/table.kinbody.xml')
 
-        self.robot.GetEnv().Add(table)
+        self.robot.GetEnv().Add(self.table)
 
         table_pose = numpy.array([[ 0, 0, -1, 0.7],
                                   [-1, 0,  0, 0],
                                   [ 0, 1,  0, 0],
                                   [ 0, 0,  0, 1]])
-        table.SetTransform(table_pose)
+        self.table.SetTransform(table_pose)
 
         # set the camera
         camera_pose = numpy.array([[ 0.3259757 ,  0.31990565, -0.88960678,  2.84039211],
@@ -59,6 +60,29 @@ class HerbEnvironment(object):
                 successors.append(newID)
 
         return successors
+
+    def CheckCollisions(self, node_id):
+        
+        config = self.discrete_env.NodeIdToConfiguration(node_id)
+
+        self.robot.SetActiveDOFValues(config)
+
+        if self.robot.GetEnv().CheckCollision(self.robot, self.table) == True:
+            return True
+        else:
+            return False
+
+
+
+    def InBounds(self, coord):
+        #return True
+
+        config = self.discrete_env.GridCoordToConfiguration(coord)
+
+        for x in xrange(0, self.discrete_env.dimension):
+            if not(config[x] < self.upper_limits[x]-0.0005 and config[x] > self.lower_limits[x]+0.0005):
+                return False
+        return True
 
 
     def ComputeDistance(self, start_id, end_id):
