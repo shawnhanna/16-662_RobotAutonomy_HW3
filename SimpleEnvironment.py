@@ -36,19 +36,19 @@ class SimpleEnvironment(object):
         coords = env.NodeIdToGridCoord(node_id)
         # print("coordinates for node id ("+str(node_id)+") = "+str(coords))
 
-        print('\n')
+        # Iterates over each dimension, adding and subtracting to get to different successors
         for x in xrange(0,self.discrete_env.dimension):
             newCoord = coords[:]
+
+            # Negative Neighbor
             newCoord[x] = coords[x] - 1
             newID = env.GridCoordToNodeId(newCoord)
-            print(coords)
-            print(newCoord)
             if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
                 successors.append(newID)
 
+            # Positive Neighbor
             newCoord[x] = coords[x] + 1
             newID = env.GridCoordToNodeId(newCoord)
-            print(newCoord)
             if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
                 successors.append(newID)
 
@@ -57,11 +57,14 @@ class SimpleEnvironment(object):
     def CheckCollisions(self, node_id):
         config = self.discrete_env.NodeIdToConfiguration(node_id)
 
+        # Computes Transform to Robot
         x = config[0]
         y = config[1]
         transform = self.robot.GetTransform()
         transform[0][3] = x
         transform[1][3] = y
+
+        # Assigns Transform to Robot and Checks Collision
         self.robot.SetTransform(transform)
         if self.robot.GetEnv().CheckCollision(self.robot,self.table) == True:
             return True
@@ -71,18 +74,18 @@ class SimpleEnvironment(object):
 
 
     def InBounds(self, coord):
-        #return True
 
         config = self.discrete_env.GridCoordToConfiguration(coord)
 
         for x in xrange(0, self.discrete_env.dimension):
+            # Checks each dimension against upper and lower limits
             if not(config[x] < self.upper_limits[x]-0.0005 and config[x] > self.lower_limits[x]+0.0005):
                 return False
         return True
 
 
     def ComputeDistance(self, start_id, end_id):
-        # TODO: Here you will implement a function that
+        # This is a function that
         # computes the distance between the configurations given
         # by the two node ids
         start = self.discrete_env.NodeIdToConfiguration(start_id)
@@ -101,8 +104,7 @@ class SimpleEnvironment(object):
         return dist
 
     def ComputeHeuristicCost(self, start_id, goal_id):
-        # TODO: Here you will implement a function that
-        # computes the heuristic cost between the configurations
+        # This function computes the heuristic cost between the configurations
         # given by the two node ids
         cost = self.ComputeDistance(start_id, goal_id)
 

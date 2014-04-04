@@ -38,8 +38,7 @@ class HerbEnvironment(object):
     def GetSuccessors(self, node_id):
 
         successors = []
-
-        # TODO: Here you will implement a function that looks
+        #  This function looks
         #  up the configuration associated with the particular node_id
         #  and return a list of node_ids that represent the neighboring
         #  nodes
@@ -47,13 +46,18 @@ class HerbEnvironment(object):
         coords = env.NodeIdToGridCoord(node_id)
         # print("coordinates for node id ("+str(node_id)+") = "+str(coords))
 
+        # Iterate over dimensions, adding and subtracting one grid per dimension
         for x in xrange(0,self.discrete_env.dimension):
+            # Slice copy to not alter coords
             newCoord = coords[:]
+
+            # Subtraction neighbor
             newCoord[x] = coords[x] - 1
             newID = env.GridCoordToNodeId(newCoord)
             if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
                 successors.append(newID)
 
+            # Addition Neighbor
             newCoord[x] = coords[x] + 1
             newID = env.GridCoordToNodeId(newCoord)
             if (self.CheckCollisions(newID) == False and self.InBounds(newCoord) == True):
@@ -65,9 +69,11 @@ class HerbEnvironment(object):
         
         config = self.discrete_env.NodeIdToConfiguration(node_id)
 
+        # Put robot into configuration
         self.robot.SetActiveDOFValues(config)
 
-        if self.robot.GetEnv().CheckCollision(self.robot, self.table) == True:
+        # Check collision with table
+        if self.robot.GetEnv().CheckCollision(self.robot, self.table) == True or self.robot.CheckSelfCollision() == True:
             return True
         else:
             return False
@@ -75,11 +81,11 @@ class HerbEnvironment(object):
 
 
     def InBounds(self, coord):
-        #return True
 
         config = self.discrete_env.GridCoordToConfiguration(coord)
 
         for x in xrange(0, self.discrete_env.dimension):
+            # Check limits of space for each dimension
             if not(config[x] < self.upper_limits[x]-0.0005 and config[x] > self.lower_limits[x]+0.0005):
                 return False
         return True

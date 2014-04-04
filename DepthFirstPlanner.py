@@ -15,17 +15,7 @@ class DepthFirstPlanner(object):
         if self.visualize:
             self.planning_env.InitializePlot(goal_config)
 
-        # TODO: Here you will implement the depth first planner
-        #  The return path should be a numpy array
-        #  of dimension k x n where k is the number of waypoints
-        #  and n is the dimension of the robots configuration space
-
         queue = Queue.LifoQueue()
-
-        # TODO: Here you will implement the breadth first planner
-        #  The return path should be a numpy array
-        #  of dimension k x n where k is the number of waypoints
-        #  and n is the dimension of the robots configuration space
 
         d_env = self.planning_env.discrete_env
         start_id = d_env.ConfigurationToNodeId(start_config)

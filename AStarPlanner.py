@@ -82,7 +82,6 @@ class AStarPlanner(object):
                     found_path = True
                     print("Found path")
 
-            # nextTuple=queue.get()
             cur_id = queue.get()[1]
 
         plan.append(goal_config)
@@ -90,13 +89,13 @@ class AStarPlanner(object):
         while cur_id != start_id:
             cost = costs[cur_id]
             successors = self.planning_env.GetSuccessors(cur_id)
-            print("successors: "+str(successors))
+            # print("successors: "+str(successors))
             for succ in successors:
-                print("succ: "+str(d_env.NodeIdToGridCoord(succ)))
+                # print("succ: "+str(d_env.NodeIdToGridCoord(succ)))
                 successorCost = costs.get(succ)
-                print("curr cost = "+str(cost)+", new cost = "+str(successorCost))
+                # print("curr cost = "+str(cost)+", new cost = "+str(successorCost))
                 if (successorCost < cost and successorCost != None):
-                    print("Better cost")
+                    # print("Better cost")
                     if self.visualize:
                         self.planning_env.PlotEdge(d_env.NodeIdToConfiguration(succ), d_env.NodeIdToConfiguration(cur_id), 'b')
                     cur_id = succ
@@ -104,7 +103,7 @@ class AStarPlanner(object):
 
             plan.append(d_env.NodeIdToConfiguration(cur_id))
 
-            print(d_env.NodeIdToConfiguration(cur_id))
+            # print(d_env.NodeIdToConfiguration(cur_id))
 
         plan.append(start_config)
 

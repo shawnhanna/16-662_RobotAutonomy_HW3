@@ -86,7 +86,6 @@ class DiscreteEnvironment(object):
         #
         # Add one
 
-
         node_id = 0
         multiplications = 1
         for i in xrange(0, self.dimension):
@@ -101,13 +100,15 @@ class DiscreteEnvironment(object):
         # This function maps a node id to the associated
         # grid coordinate
 
-        # should work in 7D space
+        # List of Zeros the size of the dimension
         coord = [0] * self.dimension
         for p in xrange(0, self.dimension):
             i = (self.dimension-1) - p
             mult = 1
+            # Power multiplication to get top dimension offset
             for x in xrange(0, i):
                 mult = mult * self.num_cells[x]
+            # Grab Coordinate and project onto lower dimensional space
             coord[i] = math.floor(node_id / mult)
             node_id = node_id - (coord[i] * mult)
 
