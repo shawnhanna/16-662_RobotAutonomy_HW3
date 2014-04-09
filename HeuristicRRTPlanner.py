@@ -28,6 +28,8 @@ class HeuristicRRTPlanner(object):
         # Set goal parameters
         self.planning_env.SetGoalParameters(goal_config)
 
+        lengthDick = dict()
+        lengthDick[0]=0
         #IPython.embed()
 
         # Outer loop until plan complete
@@ -35,15 +37,18 @@ class HeuristicRRTPlanner(object):
             # Generate Random Configuration
             r = 1
             mQual = -1
-            while r > mQuality:
+            while r > mQual:
                 rand_conf = self.planning_env.GenerateRandomConfiguration()
 
                 # Get Nearest Neighbor
                 nn_id, nn_pos = tree.GetNearestVertex(rand_conf)
 
-                mQual = 1-(lengthDick[nn_id] - cOpt) / (maxCost - cOpt)
-                mQual = min(mQual, 2)
+                cVertex = lengthDick[nn_id] + self.planning_env.ComputeSomeDistance(rand_conf, nn_pos)
+                mQual = 1- ((cVertex - cOpt) / (maxCost - cOpt))
                 r = numpy.random.random()
+                print("New stuff: r = "+str(r)+" : mqual = "+str(mQual)+"  cvertx = "+str(cVertex)+", max = "+str(maxCost))
+
+                mQual = min(mQual, 2)
 
             # Attempt to extend from the nearest neighbor to random configurationz
             new_pos = self.planning_env.Extend(nn_pos, rand_conf)

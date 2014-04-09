@@ -194,12 +194,12 @@ class SimpleEnvironment(object):
         if (numpy.random.random() < self.p):
             return numpy.array(self.goal_config)
         config = [0] * 2;
-        lower_limits, upper_limits = self.boundary_limits
+
 
         # Returns random value in range [low, high]
         # p = low + random[0 to 1] * (high - low)
-        config[0] = lower_limits[0] + numpy.random.random()*(upper_limits[0] - lower_limits[0]);
-        config[1] = lower_limits[1] + numpy.random.random()*(upper_limits[1] - lower_limits[1]);
+        config[0] = self.lower_limits[0] + numpy.random.random()*(self.upper_limits[0] - self.lower_limits[0]);
+        config[1] = self.lower_limits[1] + numpy.random.random()*(self.upper_limits[1] - self.lower_limits[1]);
 
         return numpy.array(config)
 
