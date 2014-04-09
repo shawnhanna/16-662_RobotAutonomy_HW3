@@ -208,4 +208,4 @@ class HerbEnvironment(object):
         # But this has been solved in openrave etc. so I'm just hardcoding it here.
         # IPython.embed()
         self.robot.SetJointValues(config, self.robot.GetActiveDOFIndices())
-        return self.env.CheckCollision(self.robot, self.table) or self.robot.CheckSelfCollision()
+        return self.robot.GetEnv().CheckCollision(self.robot, self.table) or self.robot.CheckSelfCollision()
