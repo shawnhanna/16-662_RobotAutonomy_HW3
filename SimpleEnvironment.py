@@ -228,8 +228,12 @@ class SimpleEnvironment(object):
         MAX_STEP_SIZE = 0.01
 
         # If two points are so close vs step size, it can make it
-        if (dist < MAX_STEP_SIZE):
-            return end_config
+        # EPSILON = 0.5
+        # if (dist < MAX_STEP_SIZE):
+        #     return end_config
+        # else:
+        #     theta = math.atan2(end_config[1]-start_config[1],end_config[0]-start_config[0])
+        #     end_config = start_config[0] + EPSILON*math.cos(theta), start_config[1] + EPSILON*math.sin(theta)
 
         num_steps = round(dist/MAX_STEP_SIZE)
 
