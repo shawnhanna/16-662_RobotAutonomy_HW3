@@ -23,7 +23,6 @@ class SimpleEnvironment(object):
         self.table.SetTransform(table_pose)
 
         self.lastDrawTime = int(round(time.time() * 1000))
-        self.drawCount = 1
 
     def GetSuccessors(self, node_id):
 
@@ -142,10 +141,10 @@ class SimpleEnvironment(object):
                 color+'.-', linewidth=2.5)
 
         millis = int(round(time.time() * 1000))
-        print("millis = "+str(millis)+", last = "+str(self.lastDrawTime))
+        # print("millis = "+str(millis)+", last = "+str(self.lastDrawTime))
         if((millis - self.lastDrawTime) > 1000):
-            self.lastDrawTime = millis
             pl.draw()
+            self.lastDrawTime = int(round(time.time() * 1000))
 
 
     def ForcePlot(self):
