@@ -72,6 +72,8 @@ class BreadthFirstPlanner(object):
             if self.visualize:
                self.planning_env.PlotEdge(d_env.NodeIdToConfiguration(cur_id), d_env.NodeIdToConfiguration(cur_id), 'b')
 
+        if self.visualize:
+            self.planning_env.ForcePlot()
 
         plan.append(start_config)
 

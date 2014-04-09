@@ -141,8 +141,12 @@ class SimpleEnvironment(object):
                 [sconfig[1], econfig[1]],
                 color+'.-', linewidth=2.5)
 
-        self.drawCount = self.drawCount + 1
         millis = int(round(time.time() * 1000))
-        if((self.lastDrawTime + self.drawCount) < millis):
+        print("millis = "+str(millis)+", last = "+str(self.lastDrawTime))
+        if((millis - self.lastDrawTime) > 1000):
             self.lastDrawTime = millis
             pl.draw()
+
+    def ForcePlot(self):
+        print("Drawing final plot")
+        pl.draw()

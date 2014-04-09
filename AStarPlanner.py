@@ -105,6 +105,9 @@ class AStarPlanner(object):
 
             # print(d_env.NodeIdToConfiguration(cur_id))
 
+        if self.visualize:
+            self.planning_env.ForcePlot()
+
         plan.append(start_config)
 
         plan.reverse()
