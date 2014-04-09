@@ -147,6 +147,39 @@ class SimpleEnvironment(object):
             self.lastDrawTime = millis
             pl.draw()
 
+
     def ForcePlot(self):
         print("Drawing final plot")
         pl.draw()
+
+
+    def ShortenPath(self, path, timeout=5.0):
+
+        #
+        # TODO: Implement a function which performs path shortening
+        #  on the given path.  Terminate the shortening after the
+        #  given timout (in seconds).
+        #
+        t0 = time()
+        idx = 0
+        print "Shortening Path (original length: %d" % len(path)
+        while idx < len(path)-1 and time() - t0 < timeout:
+            # Check backwrds from goal
+            for ridx in xrange(len(path)-1, idx, -1):
+                print idx, ridx
+                if self.Extend(path[idx], path[ridx]) != None:
+
+                    dist_ab = self.ComputeDistance(path[idx], path[ridx])
+                    dist_path_slice = self.ComputePathSliceLength(path, idx, ridx)
+                    # If distance between two points is less than distance along path, slice out inbetween
+                    if dist_ab < dist_path_slice:
+                        # Remove all inbetween if not next to each other
+                        # And done
+                        if (ridx - idx+1 > 0):
+                            path[idx+1:ridx] = []
+                            break
+            idx += 1
+        print "Shorter Path (length: %d" % len(path)
+
+        return path
+
