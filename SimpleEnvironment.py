@@ -25,6 +25,8 @@ class SimpleEnvironment(object):
         self.lastDrawTime = int(round(time.time() * 1000))
         self.drawCount = 1
 
+        self.p = 0
+
     def GetSuccessors(self, node_id):
 
         successors = []
@@ -168,8 +170,7 @@ class SimpleEnvironment(object):
             for ridx in xrange(len(path)-1, idx, -1):
                 print idx, ridx
                 if self.Extend(path[idx], path[ridx]) != None:
-
-                    dist_ab = self.ComputeDistance(path[idx], path[ridx])
+                    dist_ab = self.ComputeSomeDistance(path[idx], path[ridx])
                     dist_path_slice = self.ComputePathSliceLength(path, idx, ridx)
                     # If distance between two points is less than distance along path, slice out inbetween
                     if dist_ab < dist_path_slice:
@@ -181,5 +182,73 @@ class SimpleEnvironment(object):
             idx += 1
         print "Shorter Path (length: %d" % len(path)
 
-        return path
+        return path    
 
+    def SetGoalParameters(self, goal_config, p = 0.2):
+        self.goal_config = goal_config
+        self.p = p
+        
+    def GenerateRandomConfiguration(self):
+        if (numpy.random.random() < self.p):
+            return numpy.array(self.goal_config)
+        config = [0] * 2;
+        lower_limits, upper_limits = self.boundary_limits
+        
+        # Returns random value in range [low, high]
+        # p = low + random[0 to 1] * (high - low)
+        config[0] = lower_limits[0] + numpy.random.random()*(upper_limits[0] - lower_limits[0]);
+        config[1] = lower_limits[1] + numpy.random.random()*(upper_limits[1] - lower_limits[1]);
+        
+        return numpy.array(config)
+
+    def ComputeSomeDistance(self, start_config, end_config):
+        #
+        # TODO: Implement a function which computes the distance between
+        # two configurations
+        #
+        return self.getDistance(end_config-start_config)
+
+    def getDistance(self, offset):
+        return numpy.sqrt(sum(offset**2))
+
+    def checkConfigurationCollision(self, config):
+        # This could be extended to N bodies check using loops, quadtrees etc.
+        # But this has been solved in openrave etc. so I'm just hardcoding it here.
+        tform = numpy.array([[1, 0, 0, config[0]], 
+                             [0, 1, 0, config[1]], 
+                             [0, 0, 1, 0], 
+                             [0, 0, 0, 1]])
+        self.robot.SetTransform(tform)
+        return checkAABBCollision(self.robot.ComputeAABB(), self.tableAABB)
+
+    def checkRobotTableCollision():
+        # This could be extended to N bodies check using loops, quadtrees etc.
+        # But this has been solved in openrave etc. so I'm just hardcoding it here.
+        return checkAABBCollision(self.robot.ComputeAABB(), self.tableAABB)
+
+    def Extend(self, start_config, end_config):
+        
+        #
+        # TODO: Implement a function which attempts to extend from 
+        #   a start configuration to a goal configuration
+        #
+        dist = self.ComputeSomeDistance(start_config, end_config)
+        MAX_STEP_SIZE = 0.01
+
+        # If two points are so close vs step size, it can make it
+        if (dist < MAX_STEP_SIZE):
+            return end_config
+
+        num_steps = round(dist/MAX_STEP_SIZE)
+
+        path = numpy.array([numpy.linspace(start_config[0], end_config[0], num_steps),
+                            numpy.linspace(start_config[1], end_config[1], num_steps)])
+
+        #IPython.embed()
+        for p in path.transpose():
+            # print(p)
+            if self.checkConfigurationCollision(p):
+                return None
+
+        # Return last element in path
+        return path.transpose()[-1]
