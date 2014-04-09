@@ -26,6 +26,8 @@ class SimpleEnvironment(object):
 
         self.p = 0
 
+        self.tableAABB = self.robot.GetEnv().GetKinBody('conference_table').ComputeAABB()
+
 
     def GetSuccessors(self, node_id):
 
@@ -216,22 +218,6 @@ class SimpleEnvironment(object):
         return numpy.sqrt(sum(offset**2))
 
 
-    def checkConfigurationCollision(self, config):
-        # This could be extended to N bodies check using loops, quadtrees etc.
-        # But this has been solved in openrave etc. so I'm just hardcoding it here.
-        tform = numpy.array([[1, 0, 0, config[0]],
-                             [0, 1, 0, config[1]],
-                             [0, 0, 1, 0],
-                             [0, 0, 0, 1]])
-        self.robot.SetTransform(tform)
-        return checkAABBCollision(self.robot.ComputeAABB(), self.tableAABB)
-
-    def checkRobotTableCollision():
-        # This could be extended to N bodies check using loops, quadtrees etc.
-        # But this has been solved in openrave etc. so I'm just hardcoding it here.
-        return checkAABBCollision(self.robot.ComputeAABB(), self.tableAABB)
-
-
     def Extend(self, start_config, end_config):
 
         #
@@ -259,8 +245,25 @@ class SimpleEnvironment(object):
         # Return last element in path
         return path.transpose()[-1]
 
-    def checkAABBCollision(a, b):
-        # Checks collision between two AABB rectangles
-        abs_dist = abs(b.pos() - a.pos())
-        # If any of the extents (x/y/z) is > then abs dist, then collision
-        return all(a.extents() + b.extents() > abs_dist)
+
+    def checkConfigurationCollision(self, config):
+        # This could be extended to N bodies check using loops, quadtrees etc.
+        # But this has been solved in openrave etc. so I'm just hardcoding it here.
+        tform = numpy.array([[1, 0, 0, config[0]],
+                             [0, 1, 0, config[1]],
+                             [0, 0, 1, 0],
+                             [0, 0, 0, 1]])
+        self.robot.SetTransform(tform)
+        return checkAABBCollision(self.robot.ComputeAABB(), self.tableAABB)
+
+    def checkRobotTableCollision():
+        # This could be extended to N bodies check using loops, quadtrees etc.
+        # But this has been solved in openrave etc. so I'm just hardcoding it here.
+        return checkAABBCollision(self.robot.ComputeAABB(), self.tableAABB)
+
+
+def checkAABBCollision(a, b):
+    # Checks collision between two AABB rectangles
+    abs_dist = abs(b.pos() - a.pos())
+    # If any of the extents (x/y/z) is > then abs dist, then collision
+    return all(a.extents() + b.extents() > abs_dist)

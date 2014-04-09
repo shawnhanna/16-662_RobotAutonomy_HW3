@@ -11,6 +11,7 @@ from AStarPlanner import AStarPlanner
 from DepthFirstPlanner import DepthFirstPlanner
 from BreadthFirstPlanner import BreadthFirstPlanner
 from HeuristicRRTPlanner import HeuristicRRTPlanner
+from RRTPlanner import RRTPlanner
 
 def main(robot, planning_env, planner):
 
@@ -93,6 +94,9 @@ if __name__ == "__main__":
     elif args.planner == 'hrrt':
         print("hrrt")
         planner = HeuristicRRTPlanner(planning_env, visualize)
+    elif args.planner == 'rrt':
+        print("rrt")
+        planner = RRTPlanner(planning_env, visualize)
     else:
         print 'Unknown planner option: %s' % args.planner
         exit(0)

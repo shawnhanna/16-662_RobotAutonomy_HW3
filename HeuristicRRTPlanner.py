@@ -28,8 +28,8 @@ class HeuristicRRTPlanner(object):
         # Set goal parameters
         self.planning_env.SetGoalParameters(goal_config)
 
-        lengthDick = dict()
-        lengthDick[0]=0
+        lengthDict = dict()
+        lengthDict[0]=0
         #IPython.embed()
 
         # Outer loop until plan complete
@@ -43,12 +43,12 @@ class HeuristicRRTPlanner(object):
                 # Get Nearest Neighbor
                 nn_id, nn_pos = tree.GetNearestVertex(rand_conf)
 
-                cVertex = lengthDick[nn_id] + self.planning_env.ComputeSomeDistance(rand_conf, nn_pos)
+                cVertex = lengthDict[nn_id] #+ self.planning_env.ComputeSomeDistance(rand_conf, nn_pos)
                 mQual = 1- ((cVertex - cOpt) / (maxCost - cOpt))
                 r = numpy.random.random()
-                print("New stuff: r = "+str(r)+" : mqual = "+str(mQual)+"  cvertx = "+str(cVertex)+", max = "+str(maxCost))
+                # print("New stuff: r = "+str(r)+" : mqual = "+str(mQual)+"  cvertx = "+str(cVertex)+", max = "+str(maxCost))
 
-                mQual = min(mQual, 2)
+                mQual = min(mQual, 10)
 
             # Attempt to extend from the nearest neighbor to random configurationz
             new_pos = self.planning_env.Extend(nn_pos, rand_conf)
@@ -61,8 +61,8 @@ class HeuristicRRTPlanner(object):
                 new_id = tree.AddVertex(new_pos)
                 tree.AddEdge(nn_id, new_id)
                 #calculate cost of the new vertex
-                lengthDick[new_id] = lengthDick[nn_id] + self.planning_env.ComputeSomeDistance(new_pos, nn_pos)
-                maxCost = max(lengthDick[new_id], maxCost)
+                lengthDict[new_id] = lengthDict[nn_id] + self.planning_env.ComputeSomeDistance(new_pos, nn_pos)
+                maxCost = max(lengthDict[new_id], maxCost)
 
                 if self.visualize:
                     # print("Plotting")
