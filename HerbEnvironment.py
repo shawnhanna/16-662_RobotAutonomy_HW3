@@ -35,6 +35,8 @@ class HerbEnvironment(object):
                                    [ 0.        ,  0.        ,  0.        ,  1.        ]])
         self.robot.GetEnv().GetViewer().SetCamera(camera_pose)
 
+        self.p = 0
+
     def GetSuccessors(self, node_id):
 
         successors = []
@@ -138,3 +140,72 @@ class HerbEnvironment(object):
         print "Shorter Path (length: %d" % len(path)
 
         return path
+
+    def SetGoalParameters(self, goal_config, p = 0.2):
+        self.goal_config = goal_config
+        self.p = p
+        
+
+    def GenerateRandomConfiguration(self):
+        if (numpy.random.random() < self.p):
+            return numpy.array(self.goal_config)
+
+        config = [0] * len(self.robot.GetActiveDOFIndices())
+
+        lower_limits, upper_limits = self.robot.GetActiveDOFLimits()
+
+        for i in xrange(len(config)):
+            config[i] = lower_limits[i] + numpy.random.random()*(upper_limits[i] - lower_limits[i]);
+        #
+        # TODO: Generate and return a random configuration
+        #
+        return numpy.array(config)
+
+    def ComputeSomeDistance(self, start_config, end_config):
+        #
+        # TODO: Implement a function which computes the distance between
+        # two configurations
+        #
+        return self.getDistance(end_config-start_config)
+
+    def getDistance(self, offset):
+        return numpy.sqrt(sum(offset**2))
+
+
+    def Extend(self, start_config, end_config):
+        
+        #
+        # TODO: Implement a function which attempts to extend from 
+        #   a start configuration to a goal configuration
+        #
+        dist = self.ComputeSomeDistance(start_config, end_config)
+        MAX_STEP_SIZE = 0.01
+
+        # If two points are so close vs step size, it can make it
+        if (dist < MAX_STEP_SIZE):
+            return end_config
+
+        num_steps = round(dist/MAX_STEP_SIZE)
+        path = numpy.array(map(lambda x: numpy.linspace(x[0], x[1], num_steps), zip(start_config,end_config)))
+
+        #IPython.embed()
+        for p in path.transpose():
+            # print(p)
+            if self.checkConfigurationCollision(p):
+                return None
+
+        # Return last element in path
+        return path.transpose()[-1]
+
+    def ComputePathSliceLength(self, path, a_idx, b_idx):
+        dist_path_slice = 0
+        for x in xrange(a_idx,b_idx):
+            dist_path_slice += self.ComputeSomeDistance(path[x], path[x+1])
+        return dist_path_slice
+
+    def checkConfigurationCollision(self, config):
+        # This could be extended to N bodies check using loops, quadtrees etc.
+        # But this has been solved in openrave etc. so I'm just hardcoding it here.
+        # IPython.embed()
+        self.robot.SetJointValues(config, self.robot.GetActiveDOFIndices())
+        return self.env.CheckCollision(self.robot, self.table) or self.robot.CheckSelfCollision()
