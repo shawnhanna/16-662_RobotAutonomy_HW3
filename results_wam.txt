@@ -1,6 +1,12 @@
 Nodes Expanded = 59139 
 Resolution = 0.100000 
-plan time = 85.428920 
+plan time = 87.766105 
+path length = 2.100000 
+Planner = <class 'AStarPlanner.AStarPlanner'> 
+
+Nodes Expanded = 59139 
+Resolution = 0.100000 
+plan time = 87.857347 
 path length = 2.100000 
 Planner = <class 'AStarPlanner.AStarPlanner'> 
 
