@@ -258,3 +258,9 @@ class SimpleEnvironment(object):
 
         # Return last element in path
         return path.transpose()[-1]
+
+    def checkAABBCollision(a, b):
+        # Checks collision between two AABB rectangles
+        abs_dist = abs(b.pos() - a.pos())
+        # If any of the extents (x/y/z) is > then abs dist, then collision
+        return all(a.extents() + b.extents() > abs_dist)
