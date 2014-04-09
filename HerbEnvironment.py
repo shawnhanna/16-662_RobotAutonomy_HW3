@@ -68,7 +68,7 @@ class HerbEnvironment(object):
         return successors
 
     def CheckCollisions(self, node_id):
-        
+
         config = self.discrete_env.NodeIdToConfiguration(node_id)
 
         # Put robot into configuration
@@ -113,10 +113,10 @@ class HerbEnvironment(object):
         return cost
 
     def ShortenPath(self, path, timeout=5.0):
-        
-        # 
+
+        #
         # TODO: Implement a function which performs path shortening
-        #  on the given path.  Terminate the shortening after the 
+        #  on the given path.  Terminate the shortening after the
         #  given timout (in seconds).
         #
         t0 = time()
@@ -126,7 +126,7 @@ class HerbEnvironment(object):
             # Check backwrds from goal
             for ridx in xrange(len(path)-1, idx, -1):
                 if self.Extend(path[idx], path[ridx]) != None:
-                    
+
                     dist_ab = self.ComputeDistance(path[idx], path[ridx])
                     dist_path_slice = self.ComputePathSliceLength(path, idx, ridx)
                     # If distance between two points is less than distance along path, slice out inbetween
@@ -144,7 +144,7 @@ class HerbEnvironment(object):
     def SetGoalParameters(self, goal_config, p = 0.2):
         self.goal_config = goal_config
         self.p = p
-        
+
 
     def GenerateRandomConfiguration(self):
         if (numpy.random.random() < self.p):
@@ -173,9 +173,9 @@ class HerbEnvironment(object):
 
 
     def Extend(self, start_config, end_config):
-        
+
         #
-        # TODO: Implement a function which attempts to extend from 
+        # TODO: Implement a function which attempts to extend from
         #   a start configuration to a goal configuration
         #
         dist = self.ComputeSomeDistance(start_config, end_config)
