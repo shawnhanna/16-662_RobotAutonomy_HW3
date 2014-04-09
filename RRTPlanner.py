@@ -7,20 +7,20 @@ class RRTPlanner(object):
     def __init__(self, planning_env, visualize):
         self.planning_env = planning_env
         self.visualize = visualize
-        
+
 
     def Plan(self, start_config, goal_config, epsilon = 0.001):
-        
+
         tree = RRTTree(self.planning_env, start_config)
         plan = []
         if self.visualize and hasattr(self.planning_env, 'InitializePlot'):
             self.planning_env.InitializePlot(goal_config)
-        
+
         # TODO: Here you will implement the rrt planner
         #  The return path should be an array
         #  of dimension k x n where k is the number of waypoints
         #  and n is the dimension of the robots configuration space
-        
+
         plan.append(start_config)
         plan.append(goal_config)
 
@@ -30,7 +30,7 @@ class RRTPlanner(object):
         #IPython.embed()
 
         # Outer loop until plan complete
-        while self.planning_env.ComputeDistance(goal_config, tree.GetNearestVertex(goal_config)[1]) > epsilon:
+        while self.planning_env.ComputeSomeDistance(goal_config, tree.GetNearestVertex(goal_config)[1]) > epsilon:
             # Generate Random Configuration
             rand_conf = self.planning_env.GenerateRandomConfiguration()
 
@@ -49,7 +49,7 @@ class RRTPlanner(object):
                 if self.visualize:
                     # print("Plotting")
                     self.planning_env.PlotEdge(nn_pos, new_pos)
-        
+
         #Gen path from start to goal
         p = len(tree.vertices) - 1
         path = [p]
@@ -60,7 +60,7 @@ class RRTPlanner(object):
             p = tree.edges.get(p)
             path.append(p)
             plan.append(tree.vertices[p])
-        
+
         path.reverse()
         plan.reverse()
 
@@ -70,4 +70,3 @@ class RRTPlanner(object):
 
         return plan
 
-        
