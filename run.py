@@ -22,7 +22,21 @@ def main(robot, planning_env, planner):
     else:
         goal_config = numpy.array([3.0, 0.0])
 
+    plan_start = time.time()
     plan = planner.Plan(start_config, goal_config)
+    plan_time = time.time() - plan_start
+    path_length = planning_env.discrete_env.resolution*len(plan)
+    f = open('results.txt', 'a')
+    f.write("Resolution = %f" % planning_env.discrete_env.resolution)
+    f.write('\n')
+    f.write("plan time = %f" % plan_time)
+    f.write('\n')
+    f.write("path length = %f" % path_length)
+    f.write('\n')
+    f.write("Planner = %s" % planner.__class__)
+    f.write('\n')
+    f.write('\n')
+    f.close()
     traj = robot.ConvertPlanToTrajectory(plan)
 
     raw_input('Press any key to execute trajectory')
