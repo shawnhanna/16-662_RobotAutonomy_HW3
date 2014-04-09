@@ -82,8 +82,8 @@ class BreadthFirstPlanner(object):
 
         plan.reverse()
 
-        f = open('results.txt', 'a')
-        f.write('Nodes Expanded = %d \n' % num_expanded)
-        f.close()
+        # f = open('results.txt', 'a')
+        # f.write('Nodes Expanded = %d \n' % num_expanded)
+        # f.close()
 
         return plan
