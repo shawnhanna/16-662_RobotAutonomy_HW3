@@ -1,0 +1,54 @@
+Nodes Expanded = 82955 
+Resolution = 0.050000 
+plan time = 6.540943 
+path length = 5.600000 
+Planner = <class 'BreadthFirstPlanner.BreadthFirstPlanner'> 
+
+Nodes Expanded = 19771 
+Resolution = 0.100000 
+plan time = 1.553374 
+path length = 5.600000 
+Planner = <class 'BreadthFirstPlanner.BreadthFirstPlanner'> 
+
+Nodes Expanded = 3068 
+Resolution = 0.250000 
+plan time = 0.258791 
+path length = 6.000000 
+Planner = <class 'BreadthFirstPlanner.BreadthFirstPlanner'> 
+
+Nodes Expanded = 15261 
+Resolution = 0.050000 
+plan time = 1.318399 
+path length = 5.700000 
+Planner = <class 'DepthFirstPlanner.DepthFirstPlanner'> 
+
+Nodes Expanded = 4005 
+Resolution = 0.100000 
+plan time = 0.337791 
+path length = 5.600000 
+Planner = <class 'DepthFirstPlanner.DepthFirstPlanner'> 
+
+Nodes Expanded = 566 
+Resolution = 0.250000 
+plan time = 0.054589 
+path length = 6.000000 
+Planner = <class 'DepthFirstPlanner.DepthFirstPlanner'> 
+
+Nodes Expanded = 5115 
+Resolution = 0.050000 
+plan time = 0.488445 
+path length = 5.600000 
+Planner = <class 'AStarPlanner.AStarPlanner'> 
+
+Nodes Expanded = 1279 
+Resolution = 0.100000 
+plan time = 0.140720 
+path length = 5.600000 
+Planner = <class 'AStarPlanner.AStarPlanner'> 
+
+Nodes Expanded = 226 
+Resolution = 0.250000 
+plan time = 0.032253 
+path length = 6.000000 
+Planner = <class 'AStarPlanner.AStarPlanner'> 
+

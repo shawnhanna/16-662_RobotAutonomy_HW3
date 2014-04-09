@@ -112,7 +112,7 @@ class AStarPlanner(object):
 
         plan.reverse()
 
-        f = open('results.txt', 'a')
+        f = open('results_wam.txt', 'a')
         f.write('Nodes Expanded = %d \n' % num_expanded)
         f.close()
 

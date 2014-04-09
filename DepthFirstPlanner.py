@@ -25,6 +25,8 @@ class DepthFirstPlanner(object):
         costs[start_id] = 0
         queue.put(start_id)
 
+        num_expanded = 0
+
         print("Goal id = "+str(goal_id))
 
         cur_id = start_id
@@ -34,6 +36,7 @@ class DepthFirstPlanner(object):
             # print(d_env.NodeIdToConfiguration(cur_id))
             succ = self.planning_env.GetSuccessors(cur_id)
             for new_id in succ:
+                num_expanded = num_expanded + 1
                 if (costs.get(new_id) is None):
                     cost = costs[cur_id] + d_env.resolution
                     costs[new_id] = cost
@@ -74,5 +77,9 @@ class DepthFirstPlanner(object):
         plan.append(start_config)
 
         plan.reverse()
+
+        f = open('results.txt', 'a')
+        f.write('Nodes Expanded = %d \n' % num_expanded)
+        f.close()
 
         return plan
