@@ -14,7 +14,7 @@ from HeuristicRRTPlanner import HeuristicRRTPlanner
 from RRTPlanner import RRTPlanner
 
 def main(robot, planning_env, planner):
-
+    print planner.__class__.__name__
     raw_input('Press any key to begin planning')
 
     start_config = numpy.array(robot.GetCurrentConfiguration())
@@ -27,17 +27,26 @@ def main(robot, planning_env, planner):
     with robot.robot.GetEnv():
         plan = planner.Plan(start_config, goal_config)
     plan_time = time.time() - plan_start
-    path_length = planning_env.discrete_env.resolution*len(plan)
-    f = open('results_wam_hw2.txt', 'a')
-    f.write("Resolution = %f \n" % planning_env.discrete_env.resolution)
-    f.write("plan time = %f \n" % plan_time)
-    f.write("path length = %f \n" % path_length)
+
+    f = open('hrrt_results/results_wam_hw3.txt', 'a')
+
     f.write("Planner = %s \n\n" % planner.__class__)
+    f.write("plan time = %f \n" % plan_time)
+    if planner.__class__.__name__ == "RRTPlanner":
+        path_length = planning_env.discrete_env.resolution*len(plan)
+
+    else:
+        plan_time = time.time() - plan_start
+        path_length = planning_env.discrete_env.resolution*len(plan)
+        f.write("Resolution = %f \n" % planning_env.discrete_env.resolution)
+        f.write("path length = %f \n" % path_length)
+
     f.close()
     traj = robot.ConvertPlanToTrajectory(plan)
 
     raw_input('Press any key to execute trajectory')
     robot.ExecuteTrajectory(traj)
+
 
 if __name__ == "__main__":
 
@@ -104,8 +113,6 @@ if __name__ == "__main__":
 
     main(robot, planning_env, planner)
 
-    # import IPython
-    # IPython.embed()
-
-
+    import IPython
+    IPython.embed()
 

@@ -70,6 +70,10 @@ class HeuristicRRTPlanner(object):
                     # print("Plotting")
                     self.planning_env.PlotEdge(nn_pos, new_pos)
 
+        #write out the number of nodes expanded
+        f = open('hrrt_results/results_wam_hw3.txt', 'a')
+        f.write("Nodes Expanded = %d \n" % length(tree.vertices))
+
         #Gen path from start to goal
         p = len(tree.vertices) - 1
         path = [p]
