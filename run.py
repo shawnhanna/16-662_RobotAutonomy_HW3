@@ -24,15 +24,16 @@ def main(robot, planning_env, planner):
         goal_config = numpy.array([3.0, 0.0])
 
     plan_start = time.time()
-    plan = planner.Plan(start_config, goal_config)
+    with robot.robot.GetEnv():
+        plan = planner.Plan(start_config, goal_config)
     plan_time = time.time() - plan_start
     path_length = planning_env.discrete_env.resolution*len(plan)
-    # f = open('results_wam.txt', 'a')
-    # f.write("Resolution = %f \n" % planning_env.discrete_env.resolution)
-    # f.write("plan time = %f \n" % plan_time)
-    # f.write("path length = %f \n" % path_length)
-    # f.write("Planner = %s \n\n" % planner.__class__)
-    # f.close()
+    f = open('results_wam_hw2.txt', 'a')
+    f.write("Resolution = %f \n" % planning_env.discrete_env.resolution)
+    f.write("plan time = %f \n" % plan_time)
+    f.write("path length = %f \n" % path_length)
+    f.write("Planner = %s \n\n" % planner.__class__)
+    f.close()
     traj = robot.ConvertPlanToTrajectory(plan)
 
     raw_input('Press any key to execute trajectory')
