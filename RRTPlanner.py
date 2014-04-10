@@ -11,7 +11,7 @@ class RRTPlanner(object):
 
     def Plan(self, start_config, goal_config, epsilon = 0.001):
 
-        tree = RRTTree(self.planning_env, start_config)
+        self.tree = RRTTree(self.planning_env, start_config)
         plan = []
         if self.visualize and hasattr(self.planning_env, 'InitializePlot'):
             self.planning_env.InitializePlot(goal_config)
@@ -30,12 +30,12 @@ class RRTPlanner(object):
         #IPython.embed()
 
         # Outer loop until plan complete
-        while self.planning_env.ComputeSomeDistance(goal_config, tree.GetNearestVertex(goal_config)[1]) > epsilon:
+        while self.planning_env.ComputeSomeDistance(goal_config, self.tree.GetNearestVertex(goal_config)[1]) > epsilon:
             # Generate Random Configuration
             rand_conf = self.planning_env.GenerateRandomConfiguration()
 
             # Get Nearest Neighbor
-            nn_id, nn_pos = tree.GetNearestVertex(rand_conf)
+            nn_id, nn_pos = self.tree.GetNearestVertex(rand_conf)
 
             # Attempt to extend from the nearest neighbor to random configurationz
             new_pos = self.planning_env.Extend(nn_pos, rand_conf)
@@ -44,22 +44,22 @@ class RRTPlanner(object):
             if new_pos != None:
                 # print("New Point Found!")
                 # IPython.embed()
-                new_id = tree.AddVertex(new_pos)
-                tree.AddEdge(nn_id, new_id)
+                new_id = self.tree.AddVertex(new_pos)
+                self.tree.AddEdge(nn_id, new_id)
                 if self.visualize:
                     # print("Plotting")
                     self.planning_env.PlotEdge(nn_pos, new_pos)
 
         #Gen path from start to goal
-        p = len(tree.vertices) - 1
+        p = len(self.tree.vertices) - 1
         path = [p]
         plan = []
         plan.append(goal_config)
 
         while p != 0:
-            p = tree.edges.get(p)
+            p = self.tree.edges.get(p)
             path.append(p)
-            plan.append(tree.vertices[p])
+            plan.append(self.tree.vertices[p])
 
         path.reverse()
         plan.reverse()

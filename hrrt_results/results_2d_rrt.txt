@@ -1,0 +1,18 @@
+Planner = <class 'RRTPlanner.RRTPlanner'> 
+
+plan time = 6.867625 
+path length = 8.359113 
+Nodes Expanded = 18 
+shortened path length = 6.030029 
+Planner = <class 'RRTPlanner.RRTPlanner'> 
+
+plan time = 10.458383 
+path length = 12.843191 
+Nodes Expanded = 40 
+shortened path length = 8.700499 
+Planner = <class 'RRTPlanner.RRTPlanner'> 
+
+plan time = 5.507484 
+path length = 9.436732 
+Nodes Expanded = 19 
+shortened path length = 7.648819 

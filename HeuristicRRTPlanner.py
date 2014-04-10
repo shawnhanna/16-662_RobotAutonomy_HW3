@@ -10,7 +10,7 @@ class HeuristicRRTPlanner(object):
 
     def Plan(self, start_config, goal_config, epsilon = 0.001):
 
-        tree = RRTTree(self.planning_env, start_config)
+        self.tree = RRTTree(self.planning_env, start_config)
         plan = []
         if self.visualize and hasattr(self.planning_env, 'InitializePlot'):
             self.planning_env.InitializePlot(goal_config)
@@ -33,7 +33,7 @@ class HeuristicRRTPlanner(object):
         #IPython.embed()
 
         # Outer loop until plan complete
-        while self.planning_env.ComputeSomeDistance(goal_config, tree.GetNearestVertex(goal_config)[1]) > epsilon:
+        while self.planning_env.ComputeSomeDistance(goal_config, self.tree.GetNearestVertex(goal_config)[1]) > epsilon:
             # Generate Random Configuration
             r = -1
             mQual = 0
@@ -41,7 +41,7 @@ class HeuristicRRTPlanner(object):
                 rand_conf = self.planning_env.GenerateRandomConfiguration()
 
                 # Get Nearest Neighbor
-                nn_id, nn_pos = tree.GetNearestVertex(rand_conf)
+                nn_id, nn_pos = self.tree.GetNearestVertex(rand_conf)
 
                 cVertex = lengthDict[nn_id] + self.planning_env.ComputeSomeDistance(rand_conf, nn_pos) + self.planning_env.ComputeSomeDistance(rand_conf, goal_config)
                 tMax = max(cVertex, maxCost)
@@ -60,8 +60,8 @@ class HeuristicRRTPlanner(object):
             if new_pos != None:
                 # print("New Point Found!")
                 # IPython.embed()
-                new_id = tree.AddVertex(new_pos)
-                tree.AddEdge(nn_id, new_id)
+                new_id = self.tree.AddVertex(new_pos)
+                self.tree.AddEdge(nn_id, new_id)
                 #calculate cost of the new vertex
                 lengthDict[new_id] = lengthDict[nn_id] + self.planning_env.ComputeSomeDistance(new_pos, nn_pos)
                 maxCost = max(lengthDict[new_id], maxCost)
@@ -70,20 +70,16 @@ class HeuristicRRTPlanner(object):
                     # print("Plotting")
                     self.planning_env.PlotEdge(nn_pos, new_pos)
 
-        #write out the number of nodes expanded
-        f = open('hrrt_results/results_wam_hw3.txt', 'a')
-        f.write("Nodes Expanded = %d \n" % length(tree.vertices))
-
         #Gen path from start to goal
-        p = len(tree.vertices) - 1
+        p = len(self.tree.vertices) - 1
         path = [p]
         plan = []
         plan.append(goal_config)
 
         while p != 0:
-            p = tree.edges.get(p)
+            p = self.tree.edges.get(p)
             path.append(p)
-            plan.append(tree.vertices[p])
+            plan.append(self.tree.vertices[p])
 
         path.reverse()
         plan.reverse()

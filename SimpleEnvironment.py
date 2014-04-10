@@ -164,10 +164,10 @@ class SimpleEnvironment(object):
         #  on the given path.  Terminate the shortening after the
         #  given timout (in seconds).
         #
-        t0 = time()
+        t0 = time.time()
         idx = 0
         print "Shortening Path (original length: %d" % len(path)
-        while idx < len(path)-1 and time() - t0 < timeout:
+        while idx < len(path)-1 and time.time() - t0 < timeout:
             # Check backwrds from goal
             for ridx in xrange(len(path)-1, idx, -1):
                 print idx, ridx
@@ -264,6 +264,12 @@ class SimpleEnvironment(object):
         # This could be extended to N bodies check using loops, quadtrees etc.
         # But this has been solved in openrave etc. so I'm just hardcoding it here.
         return checkAABBCollision(self.robot.ComputeAABB(), self.tableAABB)
+
+    def ComputePathSliceLength(self, path, a_idx, b_idx):
+        dist_path_slice = 0
+        for x in xrange(a_idx,b_idx):
+            dist_path_slice += self.ComputeSomeDistance(numpy.array(path[x]), numpy.array(path[x+1]))
+        return dist_path_slice
 
 
 def checkAABBCollision(a, b):

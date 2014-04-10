@@ -35,11 +35,19 @@ def main(robot, planning_env, planner):
     if planner.__class__.__name__ == "RRTPlanner" or planner.__class__.__name__ == "HeuristicRRTPlanner":
         plan_length = planning_env.ComputePathSliceLength(plan, 0, len(plan)-1)
 
+        #write out the number of nodes expanded
+        f.write("plan time = %f \n" % plan_time)
+        f.write("path length = %f \n" % plan_length)
+        f.write("Nodes Expanded = %d \n" % len(planner.tree.vertices))
+        shorter_path = planning_env.ShortenPath(plan)
+        shorter_len = planning_env.ComputePathSliceLength(shorter_path, 0, len(shorter_path)-1)
+        f.write("shortened path length = %f \n" % shorter_len)
     else:
         plan_length = planning_env.discrete_env.resolution*len(plan)
+        f.write("plan time = %f \n" % plan_time)
+        f.write("path length = %f \n" % plan_length)
         f.write("Resolution = %f \n" % planning_env.discrete_env.resolution)
-    f.write("plan time = %f \n" % plan_time)
-    f.write("path length = %f \n" % plan_length)
+
 
     f.close()
     traj = robot.ConvertPlanToTrajectory(plan)
@@ -113,6 +121,6 @@ if __name__ == "__main__":
 
     main(robot, planning_env, planner)
 
-    import IPython
-    IPython.embed()
+    # import IPython
+    # IPython.embed()
 
