@@ -200,7 +200,7 @@ class HerbEnvironment(object):
     def ComputePathSliceLength(self, path, a_idx, b_idx):
         dist_path_slice = 0
         for x in xrange(a_idx,b_idx):
-            dist_path_slice += self.ComputeSomeDistance(path[x], path[x+1])
+            dist_path_slice += self.ComputeSomeDistance(numpy.array(path[x]), numpy.array(path[x+1]))
         return dist_path_slice
 
     def checkConfigurationCollision(self, config):

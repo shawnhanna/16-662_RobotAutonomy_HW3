@@ -12,6 +12,7 @@ from DepthFirstPlanner import DepthFirstPlanner
 from BreadthFirstPlanner import BreadthFirstPlanner
 from HeuristicRRTPlanner import HeuristicRRTPlanner
 from RRTPlanner import RRTPlanner
+import IPython
 
 def main(robot, planning_env, planner):
     print planner.__class__.__name__
@@ -29,17 +30,16 @@ def main(robot, planning_env, planner):
     plan_time = time.time() - plan_start
 
     f = open('hrrt_results/results_wam_hw3.txt', 'a')
-
     f.write("Planner = %s \n\n" % planner.__class__)
-    f.write("plan time = %f \n" % plan_time)
-    if planner.__class__.__name__ == "RRTPlanner":
-        path_length = planning_env.discrete_env.resolution*len(plan)
+
+    if planner.__class__.__name__ == "RRTPlanner" or planner.__class__.__name__ == "HeuristicRRTPlanner":
+        plan_length = planning_env.ComputePathSliceLength(plan, 0, len(plan)-1)
 
     else:
-        plan_time = time.time() - plan_start
-        path_length = planning_env.discrete_env.resolution*len(plan)
+        plan_length = planning_env.discrete_env.resolution*len(plan)
         f.write("Resolution = %f \n" % planning_env.discrete_env.resolution)
-        f.write("path length = %f \n" % path_length)
+    f.write("plan time = %f \n" % plan_time)
+    f.write("path length = %f \n" % plan_length)
 
     f.close()
     traj = robot.ConvertPlanToTrajectory(plan)
