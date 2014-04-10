@@ -12,6 +12,7 @@ from DepthFirstPlanner import DepthFirstPlanner
 from BreadthFirstPlanner import BreadthFirstPlanner
 from HeuristicRRTPlanner import HeuristicRRTPlanner
 from RRTPlanner import RRTPlanner
+import IPython
 
 def main(robot, planning_env, planner):
 
@@ -27,7 +28,8 @@ def main(robot, planning_env, planner):
     with robot.robot.GetEnv():
         plan = planner.Plan(start_config, goal_config)
     plan_time = time.time() - plan_start
-    path_length = planning_env.discrete_env.resolution*len(plan)
+    plan_length = planning_env.ComputePathSliceLength(plan, 0, len(plan)-1)
+    print plan_length
     f = open('results_wam_hw2.txt', 'a')
     f.write("Resolution = %f \n" % planning_env.discrete_env.resolution)
     f.write("plan time = %f \n" % plan_time)
