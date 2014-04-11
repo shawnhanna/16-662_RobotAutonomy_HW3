@@ -20,7 +20,7 @@ def main(robot, planning_env, planner):
 
     start_config = numpy.array(robot.GetCurrentConfiguration())
     if robot.name == 'herb':
-        goal_config = numpy.array([ 4.6, -1.76, 0.00, 1.96, -1.15, 0.87, -1.43] )
+        goal_config = numpy.array([ 4.3, -1.76, 0.00, 1.96, -1.15, 0.87, -1.43] )
     else:
         goal_config = numpy.array([3.0, 0.0])
 
@@ -29,7 +29,7 @@ def main(robot, planning_env, planner):
         plan = planner.Plan(start_config, goal_config)
     plan_time = time.time() - plan_start
 
-    f = open('hrrt_results/results_wam_hw3.txt', 'a')
+    f = open('hrrt_results/results_7d_hrrt.txt', 'a')
     f.write("Planner = %s \n\n" % planner.__class__)
 
     if planner.__class__.__name__ == "RRTPlanner" or planner.__class__.__name__ == "HeuristicRRTPlanner":

@@ -170,7 +170,7 @@ class SimpleEnvironment(object):
         while idx < len(path)-1 and time.time() - t0 < timeout:
             # Check backwrds from goal
             for ridx in xrange(len(path)-1, idx, -1):
-                print idx, ridx
+                # print idx, ridx
                 if self.Extend(path[idx], path[ridx]) != None:
                     dist_ab = self.ComputeSomeDistance(path[idx], path[ridx])
                     dist_path_slice = self.ComputePathSliceLength(path, idx, ridx)

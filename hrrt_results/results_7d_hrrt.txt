@@ -1,0 +1,18 @@
+Planner = <class 'HeuristicRRTPlanner.HeuristicRRTPlanner'>
+
+plan time = 188.975604
+path length = 31.970513
+Nodes Expanded = 599
+shortened path length = 8.950584
+Planner = <class 'HeuristicRRTPlanner.HeuristicRRTPlanner'> 
+
+plan time = 264.550519 
+path length = 28.740518 
+Nodes Expanded = 856 
+shortened path length = 8.944116 
+Planner = <class 'HeuristicRRTPlanner.HeuristicRRTPlanner'> 
+
+plan time = 91.572995 
+path length = 24.061795 
+Nodes Expanded = 318 
+shortened path length = 7.321588 

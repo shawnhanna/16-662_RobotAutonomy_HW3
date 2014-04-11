@@ -1,5 +1,6 @@
 import numpy
 import IPython
+import time
 from DiscreteEnvironment import DiscreteEnvironment
 
 class HerbEnvironment(object):
@@ -119,15 +120,15 @@ class HerbEnvironment(object):
         #  on the given path.  Terminate the shortening after the
         #  given timout (in seconds).
         #
-        t0 = time()
+        t0 = time.time()
         idx = 0
         print "Shortening Path (original length: %d" % len(path)
-        while idx < len(path)-1 and time() - t0 < timeout:
+        while idx < len(path)-1 and time.time() - t0 < timeout:
             # Check backwrds from goal
             for ridx in xrange(len(path)-1, idx, -1):
                 if self.Extend(path[idx], path[ridx]) != None:
 
-                    dist_ab = self.ComputeDistance(path[idx], path[ridx])
+                    dist_ab = self.ComputeSomeDistance(path[idx], path[ridx])
                     dist_path_slice = self.ComputePathSliceLength(path, idx, ridx)
                     # If distance between two points is less than distance along path, slice out inbetween
                     if dist_ab < dist_path_slice:
@@ -179,7 +180,7 @@ class HerbEnvironment(object):
         #   a start configuration to a goal configuration
         #
         dist = self.ComputeSomeDistance(start_config, end_config)
-        MAX_STEP_SIZE = 0.01
+        MAX_STEP_SIZE = 0.05
 
         # If two points are so close vs step size, it can make it
         if (dist < MAX_STEP_SIZE):
